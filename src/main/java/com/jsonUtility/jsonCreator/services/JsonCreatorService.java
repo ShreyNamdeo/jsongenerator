@@ -111,7 +111,6 @@ public class JsonCreatorService {
         List<JsonFileDto> jsonFileDtos= new ArrayList<>();
         try {
             File file = ResourceUtils.getFile("classpath:static/ExcelFiles/"+workbookName);//2020 App dates.xlsx
-            //File file = new File(getClass().getResource("classpath:static/ExcelFiles/"+workbookName).getFile());
             FileInputStream inputStream = new FileInputStream(file);
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(sheetName);
