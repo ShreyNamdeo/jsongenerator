@@ -32,7 +32,11 @@ public class JsonCreatorService {
     private List<JsonFileDto> processJsonForSheetsExceptReligion(String workbookName,String sheetName){
         List<JsonFileDto> jsonFileDtos= new ArrayList<>();
         try {
-            File file = ResourceUtils.getFile("classpath:static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
+            //File file = ResourceUtils.getFile("classpath:static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
+            Resource resource = new ClassPathResource("static/ExcelFiles/"+workbookName);
+            InputStream input = resource.getInputStream();
+            File file = new File(workbookName);
+            copyInputStreamToFile(input, file);
             FileInputStream inputStream = new FileInputStream(file);
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(sheetName);
