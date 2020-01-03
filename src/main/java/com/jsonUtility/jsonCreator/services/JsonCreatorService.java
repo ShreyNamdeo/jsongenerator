@@ -114,7 +114,7 @@ public class JsonCreatorService {
         try {
             //File file = ResourceUtils.getFile("classpath:./static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
 
-            Resource resource = resourceLoader.getResource("classpath:static/ExcelFiles/"+workbookName);
+            Resource resource = new ClassPathResource("static/ExcelFiles/"+workbookName);
             //InputStream input = resource.getInputStream();
             File file = resource.getFile();
             FileInputStream inputStream = new FileInputStream(file);
