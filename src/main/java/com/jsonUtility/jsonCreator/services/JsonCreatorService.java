@@ -12,9 +12,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,9 +112,10 @@ public class JsonCreatorService {
         try {
             //File file = ResourceUtils.getFile("classpath:./static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
 
-            Resource resource = new ClassPathResource(workbookName);
-            //InputStream input = resource.getInputStream();
-            File file = resource.getFile();
+            Resource resource = new ClassPathResource("static/ExcelFiles/"+workbookName);
+            InputStream input = resource.getInputStream();
+            File file = new File(workbookName);
+            copyInputStreamToFile(input, file);
             FileInputStream inputStream = new FileInputStream(file);
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheet(sheetName);
@@ -226,5 +225,24 @@ public class JsonCreatorService {
     public boolean isFileExist(String workbookName) {
         Resource resource = resourceLoader.getResource("classpath:static/ExcelFiles/"+workbookName);
         return resource.exists();
+    }
+
+    private static void copyInputStreamToFile(InputStream inputStream, File file)
+            throws IOException {
+
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+
+            int read;
+            byte[] bytes = new byte[1024];
+
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+
+            // commons-io
+            //IOUtils.copy(inputStream, outputStream);
+
+        }
+
     }
 }
