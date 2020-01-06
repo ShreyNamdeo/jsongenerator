@@ -10,7 +10,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,6 +20,8 @@ public class JsonCreatorService {
 
     @Autowired
     ResourceLoader resourceLoader;
+
+    private final String fileLocation = "static/ExcelFiles/";
 
     public List<JsonFileDto> getJsonForSheet(String workbookName,String sheetName) {
         if (!sheetName.equalsIgnoreCase("Religion"))
@@ -33,7 +34,7 @@ public class JsonCreatorService {
         List<JsonFileDto> jsonFileDtos= new ArrayList<>();
         try {
             //File file = ResourceUtils.getFile("classpath:static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
-            Resource resource = new ClassPathResource("static/ExcelFiles/"+workbookName);
+            Resource resource = new ClassPathResource(fileLocation+workbookName);
             InputStream input = resource.getInputStream();
             File file = new File(workbookName);
             copyInputStreamToFile(input, file);
@@ -116,7 +117,7 @@ public class JsonCreatorService {
         try {
             //File file = ResourceUtils.getFile("classpath:./static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
 
-            Resource resource = new ClassPathResource("static/ExcelFiles/"+workbookName);
+            Resource resource = new ClassPathResource(fileLocation+workbookName);
             InputStream input = resource.getInputStream();
             File file = new File(workbookName);
             copyInputStreamToFile(input, file);
@@ -227,7 +228,7 @@ public class JsonCreatorService {
     }
 
     public boolean isFileExist(String workbookName) {
-        Resource resource = resourceLoader.getResource("classpath:static/ExcelFiles/"+workbookName);
+        Resource resource = resourceLoader.getResource("classpath:"+fileLocation+workbookName);
         return resource.exists();
     }
 
