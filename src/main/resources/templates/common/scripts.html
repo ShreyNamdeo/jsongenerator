@@ -4,14 +4,17 @@
   <body>
 
 	<div th:fragment="commmon" th:remove="tag">
-		<script
+		<!--<script
 			src="http://cdn.jsdelivr.net/webjars/jquery/2.1.4/jquery.min.js"
-			th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>
+			th:src="@{/webjars/jquery/2.1.4/jquery.min.js}"></script>-->
+		<script th:src="@{/lib/jquery/jquery.min.js}"></script>
 
-		<script
+		<!--<script
 			src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-			th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
-						
+			th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>-->
+		<script th:src="@{/lib/bootstrap/js/bootstrap.min.js}"></script>
+
+
 	</div>
 
   </body>
