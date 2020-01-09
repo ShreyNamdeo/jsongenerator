@@ -2,6 +2,7 @@ package com.jsonUtility.jsonCreator.services;
 
 import com.jsonUtility.jsonCreator.Dto.JsonFileDto;
 import com.jsonUtility.jsonCreator.util.Constants;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -19,7 +20,11 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -70,7 +75,13 @@ public class JsonCreatorService {
                     String val = "";
                     if (row.getCell(j) != null){
                         if (row.getCell(j).getCellType().name().equals("NUMERIC")) {
-                            val = String.valueOf(row.getCell(j).getNumericCellValue());
+                            //val = String.valueOf(row.getCell(j).getNumericCellValue());
+                            if (j == 2 || j == 4){
+                                Date date = row.getCell(j).getDateCellValue();
+                                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                                val = df.format(date);
+                            }else
+                                val = String.valueOf(row.getCell(j).getNumericCellValue());
                             //System.out.print(row.getCell(j).getNumericCellValue() + "|| ");
                         }
                         //Print Excel data in console
@@ -153,7 +164,12 @@ public class JsonCreatorService {
                     String val = "";
                     if (row.getCell(j) != null){
                         if (row.getCell(j).getCellType().name().equals("NUMERIC")) {
-                            val = String.valueOf(row.getCell(j).getNumericCellValue());
+                            if (j == 3 || j == 5){
+                                Date date = row.getCell(j).getDateCellValue();
+                                DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                                val = df.format(date);
+                            }else
+                                val = String.valueOf(row.getCell(j).getNumericCellValue());
                             //System.out.print(row.getCell(j).getNumericCellValue() + "|| ");
                         }
                         //Print Excel data in console
