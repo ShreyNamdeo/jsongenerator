@@ -1,6 +1,7 @@
 package com.jsonUtility.jsonCreator.services;
 
 import com.jsonUtility.jsonCreator.Dto.JsonFileDto;
+import com.jsonUtility.jsonCreator.util.Constants;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -9,9 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +28,19 @@ public class JsonCreatorService {
     @Autowired
     ResourceLoader resourceLoader;
 
-    private final String fileLocation = "static/ExcelFiles/";
+    private Path uploadLocation;
+
+    @PostConstruct
+    public void init() {
+        this.uploadLocation = Paths.get(Constants.UPLOAD_LOCATION);
+        try {
+            Files.createDirectories(uploadLocation);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize storage", e);
+        }
+    }
+
+    //private final String fileLocation = "static/ExcelFiles/";
 
     public List<JsonFileDto> getJsonForSheet(String workbookName,String sheetName) {
         if (!sheetName.equalsIgnoreCase("Religion"))
@@ -34,7 +53,8 @@ public class JsonCreatorService {
         List<JsonFileDto> jsonFileDtos= new ArrayList<>();
         try {
             //File file = ResourceUtils.getFile("classpath:static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
-            Resource resource = new ClassPathResource(fileLocation+workbookName);
+            //Resource resource = new ClassPathResource(fileLocation+workbookName);
+            Resource resource = getResourceByFileName(workbookName);
             InputStream input = resource.getInputStream();
             File file = new File(workbookName);
             copyInputStreamToFile(input, file);
@@ -117,7 +137,7 @@ public class JsonCreatorService {
         try {
             //File file = ResourceUtils.getFile("classpath:./static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
 
-            Resource resource = new ClassPathResource(fileLocation+workbookName);
+            Resource resource = getResourceByFileName(workbookName);
             InputStream input = resource.getInputStream();
             File file = new File(workbookName);
             copyInputStreamToFile(input, file);
@@ -228,8 +248,20 @@ public class JsonCreatorService {
     }
 
     public boolean isFileExist(String workbookName) {
-        Resource resource = resourceLoader.getResource("classpath:"+fileLocation+workbookName);
-        return resource.exists();
+        //Resource resource = resourceLoader.getResource("classpath:"+fileLocation+workbookName);
+        Resource resource = getResourceByFileName(workbookName);
+        return (resource.exists() || resource.isReadable());
+    }
+
+    public Resource getResourceByFileName(String fileName){
+        Path file = uploadLocation.resolve(fileName);
+        Resource resource = null;
+        try {
+            resource = new UrlResource(file.toUri());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Could not read file: " + fileName, e);
+        }
+        return resource;
     }
 
     private static void copyInputStreamToFile(InputStream inputStream, File file)

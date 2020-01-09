@@ -85,10 +85,33 @@ public class UiControllers {
                 .body(file);
     }
 
+    @RequestMapping(value = "/delete/file/{filename:.+}", method = RequestMethod.GET)
+    public String deleteFile(@PathVariable String filename,RedirectAttributes redirectAttributes) {
+        if(storageService.deleteResource(filename))
+            redirectAttributes.addFlashAttribute("message", "You successfully deleted " + filename + "!");
+        else
+            redirectAttributes.addFlashAttribute("message", "Error in file delete please try again deleting " + filename + "!");
+        restart();
+        return "redirect:/upload";
+    }
+
     @RequestMapping(value = "/files/upload", method = RequestMethod.POST)
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
         storageService.store(file);
         redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+        restart();
         return "redirect:/upload";
+    }
+
+    public void restart(){
+        Thread restartThread = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                JsonCreatorApplication.restart();
+            } catch (InterruptedException ignored) {
+            }
+        });
+        restartThread.setDaemon(false);
+        restartThread.start();
     }
 }

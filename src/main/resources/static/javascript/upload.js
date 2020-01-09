@@ -16,7 +16,6 @@ $(document).ready(function() {
 	}
 
 	listUploadedFiles();
-	
 });
 
 function listUploadedFiles() {

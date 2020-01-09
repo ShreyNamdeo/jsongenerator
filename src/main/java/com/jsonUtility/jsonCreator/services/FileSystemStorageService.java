@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -78,6 +79,23 @@ public class FileSystemStorageService {
 	
 	public Path getUploadLocation() {
 		return uploadLocation;
+	}
+
+	public Boolean deleteResource(String filename) {
+		try {
+			Path file = uploadLocation.resolve(filename);
+			Resource resource = new UrlResource(file.toUri());
+			if (resource.exists() || resource.isReadable()) {
+				File file1 = resource.getFile();
+				return file1.delete();
+			} else {
+				throw new RuntimeException("Could not read file: " + filename);
+			}
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("Could not read file: " + filename, e);
+		} catch (IOException e) {
+			throw new RuntimeException("File does not exist: " + filename, e);
+		}
 	}
 }
 

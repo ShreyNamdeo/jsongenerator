@@ -18,7 +18,7 @@ public class JsonCreatorController {
 
     @GetMapping("file/{workbookName}/sheet/{sheetName}")
     public ResponseEntity<Object> getFileToJson(@PathVariable("workbookName") String workbookName,
-                                        @PathVariable("sheetName") String sheetName) {
+                                        @PathVariable("sheetName") String  sheetName) {
         if (!jsonCreatorService.isFileExist(workbookName))
             return new ResponseEntity<>("Incorrect file name", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(jsonCreatorService.getJsonForSheet(workbookName,sheetName), HttpStatus.OK);
