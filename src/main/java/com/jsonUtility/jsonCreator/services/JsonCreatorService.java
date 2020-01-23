@@ -2,15 +2,11 @@ package com.jsonUtility.jsonCreator.services;
 
 import com.jsonUtility.jsonCreator.Dto.JsonFileDto;
 import com.jsonUtility.jsonCreator.util.Constants;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
@@ -23,15 +19,14 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class JsonCreatorService {
 
-    @Autowired
-    ResourceLoader resourceLoader;
+    /*@Autowired
+    ResourceLoader resourceLoader;*/
 
     private Path uploadLocation;
 
@@ -95,27 +90,29 @@ public class JsonCreatorService {
                         }
                     }
                     //Logic to add the row data into list
-                    if (j==0)
-                        jsonFileDto.setCategoriesSpecific((val));
+                    if (j == 0 && !val.isEmpty())
+                        jsonFileDto.setId(((int)Float.parseFloat(val)));
                     if (j==1)
-                        jsonFileDto.setSubject(val);
+                        jsonFileDto.setCategoriesSpecific((val));
                     if (j==2)
-                        jsonFileDto.setStartDate(val);
+                        jsonFileDto.setSubject(val);
                     if (j==3)
-                        jsonFileDto.setStartTime(val);
+                        jsonFileDto.setStartDate(val);
                     if (j==4)
-                        jsonFileDto.setEndDate(val);
+                        jsonFileDto.setStartTime(val);
                     if (j==5)
-                        jsonFileDto.setEndTime(val);
+                        jsonFileDto.setEndDate(val);
                     if (j==6)
-                        jsonFileDto.setAlldayevent(val);
+                        jsonFileDto.setEndTime(val);
                     if (j==7)
-                        jsonFileDto.setCategories(val);
+                        jsonFileDto.setAlldayevent(val);
                     if (j==8)
-                        jsonFileDto.setWikipediaURL(val);
+                        jsonFileDto.setCategories(val);
                     if (j==9)
-                        jsonFileDto.setGreetingCardURL(val);
+                        jsonFileDto.setWikipediaURL(val);
                     if (j==10)
+                        jsonFileDto.setGreetingCardURL(val);
+                    if (j==11)
                         jsonFileDto.setDescription(val);
                 }
                 if(isNotNull(jsonFileDto))
@@ -183,29 +180,31 @@ public class JsonCreatorService {
                         }
                     }
                     //Logic to add the row data into list
-                    if (j==0)
-                        jsonFileDto.setCountries((val));
+                    if (j == 0 && !val.isEmpty())
+                        jsonFileDto.setId(((int)Float.parseFloat(val)));
                     if (j==1)
-                        jsonFileDto.setReligion((val));
+                        jsonFileDto.setCountries((val));
                     if (j==2)
-                        jsonFileDto.setSubject(val);
+                        jsonFileDto.setReligion((val));
                     if (j==3)
-                        jsonFileDto.setStartDate(val);
+                        jsonFileDto.setSubject(val);
                     if (j==4)
-                        jsonFileDto.setStartTime(val);
+                        jsonFileDto.setStartDate(val);
                     if (j==5)
-                        jsonFileDto.setEndDate(val);
+                        jsonFileDto.setStartTime(val);
                     if (j==6)
-                        jsonFileDto.setEndTime(val);
+                        jsonFileDto.setEndDate(val);
                     if (j==7)
-                        jsonFileDto.setAlldayevent(val);
+                        jsonFileDto.setEndTime(val);
                     if (j==8)
-                        jsonFileDto.setCategories(val);
+                        jsonFileDto.setAlldayevent(val);
                     if (j==9)
-                        jsonFileDto.setWikipediaURL(val);
+                        jsonFileDto.setCategories(val);
                     if (j==10)
-                        jsonFileDto.setGreetingCardURL(val);
+                        jsonFileDto.setWikipediaURL(val);
                     if (j==11)
+                        jsonFileDto.setGreetingCardURL(val);
+                    if (j==12)
                         jsonFileDto.setDescription(val);
                 }
                 if(isNotNullForReligion(jsonFileDto))
@@ -271,7 +270,7 @@ public class JsonCreatorService {
 
     public Resource getResourceByFileName(String fileName){
         Path file = uploadLocation.resolve(fileName);
-        Resource resource = null;
+        Resource resource;
         try {
             resource = new UrlResource(file.toUri());
         } catch (MalformedURLException e) {
