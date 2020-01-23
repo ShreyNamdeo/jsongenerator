@@ -71,7 +71,7 @@ public class JsonCreatorService {
                     if (row.getCell(j) != null){
                         if (row.getCell(j).getCellType().name().equals("NUMERIC")) {
                             //val = String.valueOf(row.getCell(j).getNumericCellValue());
-                            if (j == 2 || j == 4){
+                            if (j == 3 || j == 5){
                                 Date date = row.getCell(j).getDateCellValue();
                                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
                                 val = df.format(date);
@@ -161,7 +161,7 @@ public class JsonCreatorService {
                     String val = "";
                     if (row.getCell(j) != null){
                         if (row.getCell(j).getCellType().name().equals("NUMERIC")) {
-                            if (j == 3 || j == 5){
+                            if (j == 4 || j == 6){
                                 Date date = row.getCell(j).getDateCellValue();
                                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
                                 val = df.format(date);
