@@ -91,7 +91,7 @@ public class JsonCreatorService {
                     }
                     //Logic to add the row data into list
                     if (j == 0 && !val.isEmpty())
-                        jsonFileDto.setId((Integer.toString((int)Float.parseFloat(val))));
+                        jsonFileDto.setId(val);
                     if (j==1)
                         jsonFileDto.setCategoriesSpecific((val));
                     if (j==2)
@@ -181,7 +181,7 @@ public class JsonCreatorService {
                     }
                     //Logic to add the row data into list
                     if (j == 0 && !val.isEmpty())
-                        jsonFileDto.setId((Integer.toString((int)Float.parseFloat(val))));
+                        jsonFileDto.setId(val);
                     if (j==1)
                         jsonFileDto.setCountries((val));
                     if (j==2)
