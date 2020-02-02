@@ -1,6 +1,6 @@
 package com.jsonUtility.jsonCreator.model;
 
-public class HRefModel {
+public class HRefModel extends FileVersion{
 	
 	private String href;
 	private String hrefText;

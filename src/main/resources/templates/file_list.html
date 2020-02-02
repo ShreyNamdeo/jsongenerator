@@ -16,6 +16,9 @@
 				<tbody>
 					<tr th:each="entry : ${listOfEntries}">
 						<td><a th:href="${entry.href}" th:text="${entry.hrefText}">file</a></td>
+						<td><strong>Version</strong> <span th:text="${entry.fileVersion}"></span></td>
+						<td><strong>Created on :</strong> <span th:text="${entry.createdDate}"></span> </td>
+						<td><strong>Updated on :</strong> <span th:text="${entry.updatedDate}"></span> </td>
 						<td><a th:href="'/delete/file/'+${entry.hrefText}" data-method="delete"><i class="glyphicon glyphicon-trash"></i></a></td>
 					</tr>
 				</tbody>

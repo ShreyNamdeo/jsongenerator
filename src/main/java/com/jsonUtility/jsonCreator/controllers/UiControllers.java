@@ -83,6 +83,9 @@ public class UiControllers {
                 HRefModel href = new HRefModel();
                 href.setHrefText(fileVersion.getFileName());
                 href.setHref(awsServices.generatePresignedUrl(fileVersion.getFileName(), GET,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").toString());
+                href.setFileVersion(fileVersion.getFileVersion());
+                href.setCreatedDate(fileVersion.getCreatedDate());
+                href.setUpdatedDate(fileVersion.getUpdatedDate());
                 uris.add(href);
             });
         } catch (Exception e) {
@@ -95,6 +98,7 @@ public class UiControllers {
 
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
+    @Deprecated
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
         Resource file = fileSystemStorageService.loadAsResource(filename);
         return ResponseEntity.ok()
