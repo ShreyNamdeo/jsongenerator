@@ -1,11 +1,15 @@
 package com.jsonUtility.jsonCreator.services;
 
+import com.jsonUtility.jsonCreator.Dto.FileVersionDto;
 import com.jsonUtility.jsonCreator.Dto.JsonFileDto;
+import com.jsonUtility.jsonCreator.model.FileVersion;
+import com.jsonUtility.jsonCreator.repositories.FileVersionsRepository;
 import com.jsonUtility.jsonCreator.util.Constants;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -21,12 +25,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JsonCreatorService {
 
     /*@Autowired
     ResourceLoader resourceLoader;*/
+
+    AWSServices awsServices;
+
+    @Autowired
+    JsonCreatorService(AWSServices awsServices){
+        this.awsServices = awsServices;
+    }
+
+    @Autowired
+    private FileVersionsRepository fileVersionsRepository;
 
     private Path uploadLocation;
 
@@ -42,11 +57,21 @@ public class JsonCreatorService {
 
     //private final String fileLocation = "static/ExcelFiles/";
 
-    public List<JsonFileDto> getJsonForSheet(String workbookName,String sheetName) {
-        if (!sheetName.equalsIgnoreCase("Religion"))
-            return processJsonForSheetsExceptReligion(workbookName,sheetName);
-        else
-            return processJsonForSheetReligion(workbookName,sheetName);
+    public FileVersionDto
+    getJsonForSheet(String workbookName,String sheetName) {
+        FileVersionDto fileVersionDto = new FileVersionDto();
+        Optional<FileVersion> fileVersion = fileVersionsRepository.findByFileName(workbookName);
+        if (fileVersion.isPresent()){
+            FileVersion fv = fileVersion.get();
+            fileVersionDto.setVersion(String.valueOf(fv.getFileVersion()));
+            fileVersionDto.setCreated(fv.getCreatedDate());
+            fileVersionDto.setUpdated(fv.getUpdatedDate());
+            if (!sheetName.equalsIgnoreCase("Religion"))
+                fileVersionDto.setData(processJsonForSheetsExceptReligion(workbookName,sheetName));
+            else
+                fileVersionDto.setData(processJsonForSheetReligion(workbookName,sheetName));
+        }
+        return fileVersionDto;
     }
 
     private List<JsonFileDto> processJsonForSheetsExceptReligion(String workbookName,String sheetName){
@@ -264,8 +289,9 @@ public class JsonCreatorService {
 
     public boolean isFileExist(String workbookName) {
         //Resource resource = resourceLoader.getResource("classpath:"+fileLocation+workbookName);
-        Resource resource = getResourceByFileName(workbookName);
-        return (resource.exists() || resource.isReadable());
+        /*Resource resource = getResourceByFileName(workbookName);
+        return (resource.exists() || resource.isReadable());*/
+        return awsServices.isFileWithNameExist(workbookName);
     }
 
     public Resource getResourceByFileName(String fileName){

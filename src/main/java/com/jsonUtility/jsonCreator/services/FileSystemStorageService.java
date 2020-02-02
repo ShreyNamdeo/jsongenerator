@@ -17,10 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.amazonaws.HttpMethod.GET;
 
@@ -50,7 +47,7 @@ public class FileSystemStorageService {
 	}*/
 	
 	public void store(MultipartFile file) {
-		String filename = StringUtils.cleanPath(file.getOriginalFilename());
+		String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 		try {
 			if (file.isEmpty()) {
 				throw new RuntimeException("Failed to store empty file " + filename);
@@ -106,6 +103,7 @@ public class FileSystemStorageService {
 		return result;
 	}
 	
+	@Deprecated
 	public Path getUploadLocation() {
 		return uploadLocation;
 	}
