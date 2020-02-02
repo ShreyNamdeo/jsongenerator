@@ -1,10 +1,13 @@
 package com.jsonUtility.jsonCreator.services;
 
+import com.jsonUtility.jsonCreator.model.FileVersion;
+import com.jsonUtility.jsonCreator.repositories.FileVersionsRepository;
 import com.jsonUtility.jsonCreator.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +18,11 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import static com.amazonaws.HttpMethod.GET;
 
 @Service
 public class FileSystemStorageService {
@@ -28,6 +35,9 @@ public class FileSystemStorageService {
 	FileSystemStorageService(AWSServices awsServices){
 		this.awsServices = awsServices;
 	}
+
+	@Autowired
+	FileVersionsRepository fileVersionsRepository;
 
 	/*@PostConstruct
 	public void init() {
@@ -50,9 +60,20 @@ public class FileSystemStorageService {
 			if (filename.contains("..")) {
 				throw new RuntimeException("Cannot store file with relative path outside current directory " + filename);
 			}
-			
+			awsServices.deleteByKey(filename);//Deleting previous version if exist.
+			awsServices.uploadFile(file,".xlsx");
+			Optional<FileVersion> fileVersion = fileVersionsRepository.findByFileName(filename);
+			if (!fileVersion.isPresent()){
+				fileVersionsRepository.save(new FileVersion(filename, 1, new Date()));
+			}else{
+				FileVersion fileVersion1 = fileVersion.get();
+				fileVersion1.setUpdatedDate(new Date());
+				int oldVersion = fileVersion1.getFileVersion();
+				fileVersion1.setFileVersion(oldVersion+1);
+				fileVersionsRepository.save(fileVersion1);
+			}
 			try (InputStream inputStream = file.getInputStream()) {
-				Files.copy(inputStream, this.uploadLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+				//Files.copy(inputStream, this.uploadLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
 			}
 		} catch (IOException e) {
 			throw new RuntimeException("Failed to store file " + filename, e);
@@ -89,21 +110,24 @@ public class FileSystemStorageService {
 		return uploadLocation;
 	}
 
+	@Transactional
 	public Boolean deleteResource(String filename) {
 		try {
-			Path file = uploadLocation.resolve(filename);
-			Resource resource = new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
-				File file1 = resource.getFile();
-				return file1.delete();
+			if (awsServices.isFileWithNameExist(filename)) {
+				//File file1 = resource.getFile();
+				awsServices.deleteByKey(filename);
+				fileVersionsRepository.deleteByFileName(filename);
+				return true;
 			} else {
-				throw new RuntimeException("Could not read file: " + filename);
+				throw new RuntimeException("Could not delete file: " + filename);
 			}
-		} catch (MalformedURLException e) {
-			throw new RuntimeException("Could not read file: " + filename, e);
-		} catch (IOException e) {
-			throw new RuntimeException("File does not exist: " + filename, e);
+		} catch (Exception e){
+			throw  new RuntimeException("File not deleted , please try again " + filename, e);
 		}
+	}
+
+	public List<FileVersion> getAllStoredFiles() {
+		return fileVersionsRepository.findAll();
 	}
 }
 

@@ -9,7 +9,7 @@ public class JsonCreatorApplication {
 	private static String[] args;
 	private static ConfigurableApplicationContext context;
 
-	/*public static void main(String[] args) {
+	/*public static void main(String[] args) { // This will be used when auto restart functionality is being used
 		JsonCreatorApplication.args = args;
 		JsonCreatorApplication.context = SpringApplication.run(JsonCreatorApplication.class, args);
 	}*/
@@ -17,7 +17,7 @@ public class JsonCreatorApplication {
 		SpringApplication.run(JsonCreatorApplication.class, args);
 	}
 
-    /*public static void restart() {
+    /*public static void restart() { //TO restart the application automatically
 		// close previous context
 		context.close();
 

@@ -25,6 +25,7 @@ import java.net.URL;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Objects;
 
 import static java.time.ZoneOffset.UTC;
 
@@ -50,19 +51,23 @@ public class AWSServices {
         AmazonService service = getCredsForS3("aws-s3");
         AWSCredentials credentials = new BasicAWSCredentials(service.getAccessKey(), service.getSecretKey());
         this.s3client = new AmazonS3Client(credentials);
-        this.s3client.setRegion(Region.getRegion(Regions.US_WEST_2));
+        this.s3client.setRegion(Region.getRegion(Regions.US_EAST_2));
     }
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File(file.getOriginalFilename());
+        File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
         FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
         fos.close();
         return convFile;
     }
 
+    public Boolean isFileWithNameExist(String filename){
+        return s3client.doesObjectExist(bucketName,filename);
+    }
+
     private String generateFileName(MultipartFile multiPart) {
-        return new Date().getTime() + "-" + multiPart.getOriginalFilename().replace(" ", "_");
+        return multiPart.getOriginalFilename();
     }
 
     private void uploadFileTos3bucket(String fileName, File file) {
@@ -87,7 +92,7 @@ public class AWSServices {
         Date fifteenMinutesFromNow = Date.from(LocalDateTime.now(Clock.systemUTC()).plusMinutes(15).toInstant(UTC));
         //createUrl.setExpiration(fifteenMinutesFromNow);
         createUrl.setResponseHeaders(new ResponseHeaderOverrides().withContentType(contentType));
-        s3client.setRegion(Region.getRegion(Regions.US_WEST_2));
+        //s3client.setRegion(Region.getRegion(Regions.US_WEST_2));
         return s3client.generatePresignedUrl(createUrl);
     }
 

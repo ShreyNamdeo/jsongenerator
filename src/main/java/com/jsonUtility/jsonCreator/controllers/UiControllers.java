@@ -1,7 +1,9 @@
 package com.jsonUtility.jsonCreator.controllers;
 
+import com.amazonaws.HttpMethod;
 import com.jsonUtility.jsonCreator.Dto.UserDto;
 import com.jsonUtility.jsonCreator.JsonCreatorApplication;
+import com.jsonUtility.jsonCreator.model.FileVersion;
 import com.jsonUtility.jsonCreator.model.HRefModel;
 import com.jsonUtility.jsonCreator.services.AWSServices;
 import com.jsonUtility.jsonCreator.services.FileSystemStorageService;
@@ -22,6 +24,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.amazonaws.HttpMethod.GET;
 
 @Controller
 public class UiControllers {
@@ -62,10 +66,9 @@ public class UiControllers {
     public String listFiles(Model model) {
         List<Path> lodf = new ArrayList<>();
         List<HRefModel> uris = new ArrayList<>();
-
         try {
-            lodf = fileSystemStorageService.listSourceFiles(fileSystemStorageService.getUploadLocation());
-            for(Path pt : lodf) {
+            /*lodf = fileSystemStorageService.listSourceFiles(fileSystemStorageService.getUploadLocation());
+            for(Path pt : lodf) { // This is used when files were read from the physical location
                 HRefModel href = new HRefModel();
                 href.setHref(MvcUriComponentsBuilder
                         .fromMethodName(UiControllers.class, "serveFile", pt.getFileName().toString())
@@ -74,8 +77,15 @@ public class UiControllers {
 
                 href.setHrefText(pt.getFileName().toString());
                 uris.add(href);
-            }
-        } catch (IOException e) {
+            }*/
+            List<FileVersion> fileVersions = fileSystemStorageService.getAllStoredFiles();
+            fileVersions.forEach(fileVersion -> {
+                HRefModel href = new HRefModel();
+                href.setHrefText(fileVersion.getFileName());
+                href.setHref(awsServices.generatePresignedUrl(fileVersion.getFileName(), GET,"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet").toString());
+                uris.add(href);
+            });
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
