@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="jsonGenerator">
+        <createTable tableName="amazon_services">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="access_key" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="secret_key" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="bucket_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="service_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="file_versions">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_version" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp WITH TIME ZONE">
+                <constraints nullable="true"/>
+            </column>
+            <column name="updated_date" type="timestamp WITH TIME ZONE">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

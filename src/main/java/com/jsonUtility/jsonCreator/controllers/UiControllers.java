@@ -3,6 +3,7 @@ package com.jsonUtility.jsonCreator.controllers;
 import com.jsonUtility.jsonCreator.Dto.UserDto;
 import com.jsonUtility.jsonCreator.JsonCreatorApplication;
 import com.jsonUtility.jsonCreator.model.HRefModel;
+import com.jsonUtility.jsonCreator.services.AWSServices;
 import com.jsonUtility.jsonCreator.services.FileSystemStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -28,8 +29,13 @@ public class UiControllers {
     public static String adminEmail = "admin@jsonGenerator.com";
     public static String adminPassword = "passw0rd";
 
+    private AWSServices awsServices;
+
     @Autowired
-    private FileSystemStorageService storageService;
+    private UiControllers(AWSServices awsServices){this.awsServices = awsServices;}
+
+    @Autowired
+    private FileSystemStorageService fileSystemStorageService;
 
     @RequestMapping(value = "/login")
     public String login(Model model , @QueryParam("auth") @DefaultValue("0") Integer auth){
@@ -58,7 +64,7 @@ public class UiControllers {
         List<HRefModel> uris = new ArrayList<>();
 
         try {
-            lodf = storageService.listSourceFiles(storageService.getUploadLocation());
+            lodf = fileSystemStorageService.listSourceFiles(fileSystemStorageService.getUploadLocation());
             for(Path pt : lodf) {
                 HRefModel href = new HRefModel();
                 href.setHref(MvcUriComponentsBuilder
@@ -80,7 +86,7 @@ public class UiControllers {
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-        Resource file = storageService.loadAsResource(filename);
+        Resource file = fileSystemStorageService.loadAsResource(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
@@ -88,23 +94,23 @@ public class UiControllers {
 
     @RequestMapping(value = "/delete/file/{filename:.+}", method = RequestMethod.GET)
     public String deleteFile(@PathVariable String filename,RedirectAttributes redirectAttributes) {
-        if(storageService.deleteResource(filename))
+        if(fileSystemStorageService.deleteResource(filename))
             redirectAttributes.addFlashAttribute("message", "You successfully deleted " + filename + "!");
         else
             redirectAttributes.addFlashAttribute("message", "Error in file delete please try again deleting " + filename + "!");
-        restart();
+        //restart();
         return "redirect:/upload";
     }
 
     @RequestMapping(value = "/files/upload", method = RequestMethod.POST)
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
-        storageService.store(file);
+        fileSystemStorageService.store(file);
         redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
-        restart();
+        //restart();
         return "redirect:/upload";
     }
 
-    public void restart(){
+    /*public void restart(){
         Thread restartThread = new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -114,5 +120,5 @@ public class UiControllers {
         });
         restartThread.setDaemon(false);
         restartThread.start();
-    }
+    }*/
 }

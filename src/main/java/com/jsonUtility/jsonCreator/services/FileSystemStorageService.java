@@ -1,6 +1,7 @@
 package com.jsonUtility.jsonCreator.services;
 
 import com.jsonUtility.jsonCreator.util.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,15 @@ import java.util.List;
 public class FileSystemStorageService {
 	
 	private Path uploadLocation;
-	
-	@PostConstruct
+
+	AWSServices awsServices;
+
+	@Autowired
+	FileSystemStorageService(AWSServices awsServices){
+		this.awsServices = awsServices;
+	}
+
+	/*@PostConstruct
 	public void init() {
 		this.uploadLocation = Paths.get(Constants.UPLOAD_LOCATION);
 		try {
@@ -29,7 +37,7 @@ public class FileSystemStorageService {
 		} catch (IOException e) {
 			throw new RuntimeException("Could not initialize storage", e);
 		}
-	}
+	}*/
 	
 	public void store(MultipartFile file) {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());

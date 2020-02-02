@@ -9,16 +9,19 @@ public class JsonCreatorApplication {
 	private static String[] args;
 	private static ConfigurableApplicationContext context;
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		JsonCreatorApplication.args = args;
 		JsonCreatorApplication.context = SpringApplication.run(JsonCreatorApplication.class, args);
+	}*/
+	public static void main(String[] args) throws Exception{
+		SpringApplication.run(JsonCreatorApplication.class, args);
 	}
 
-    public static void restart() {
+    /*public static void restart() {
 		// close previous context
 		context.close();
 
 		// and build new one
 		JsonCreatorApplication.context = SpringApplication.run(JsonCreatorApplication.class, args);
-    }
+    }*/
 }
