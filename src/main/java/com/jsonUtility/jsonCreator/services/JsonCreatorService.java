@@ -57,8 +57,7 @@ public class JsonCreatorService {
 
     //private final String fileLocation = "static/ExcelFiles/";
 
-    public FileVersionDto
-    getJsonForSheet(String workbookName,String sheetName) {
+    public FileVersionDto getJsonForSheet(String workbookName,String sheetName) {
         FileVersionDto fileVersionDto = new FileVersionDto();
         Optional<FileVersion> fileVersion = fileVersionsRepository.findByFileName(workbookName);
         if (fileVersion.isPresent()){
@@ -80,8 +79,8 @@ public class JsonCreatorService {
         try {
             //File file = ResourceUtils.getFile("classpath:static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
             //Resource resource = new ClassPathResource(fileLocation+workbookName);
-            Resource resource = getResourceByFileName(workbookName);
-            InputStream input = resource.getInputStream();
+            //Resource resource = getResourceByFileName(workbookName);
+            InputStream input = awsServices.getFileInputStreamByKey(workbookName);
             File file = new File(workbookName);
             copyInputStreamToFile(input, file);
             FileInputStream inputStream = new FileInputStream(file);
@@ -171,8 +170,8 @@ public class JsonCreatorService {
         try {
             //File file = ResourceUtils.getFile("classpath:./static/ExcelFiles/"+workbookName);//2020_App_dates.xlsx
 
-            Resource resource = getResourceByFileName(workbookName);
-            InputStream input = resource.getInputStream();
+            //Resource resource = getResourceByFileName(workbookName);
+            InputStream input = awsServices.getFileInputStreamByKey(workbookName);
             File file = new File(workbookName);
             copyInputStreamToFile(input, file);
             FileInputStream inputStream = new FileInputStream(file);

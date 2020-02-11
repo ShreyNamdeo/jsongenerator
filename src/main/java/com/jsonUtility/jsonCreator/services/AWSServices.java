@@ -7,10 +7,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
+import com.amazonaws.services.s3.model.*;
 import com.jsonUtility.jsonCreator.model.AmazonService;
 import com.jsonUtility.jsonCreator.repositories.AmazonServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -98,5 +93,34 @@ public class AWSServices {
 
     public void deleteByKey(String key){
         s3client.deleteObject(new DeleteObjectRequest(bucketName,key));
+    }
+
+    public File getFileByKey(String key){
+        File file = new File(key);
+        try{
+            S3Object s3Object = s3client.getObject(bucketName,key);
+            InputStream in = s3Object.getObjectContent();
+            byte[] buf = new byte[1024];
+            OutputStream out = new FileOutputStream(file);
+            int count;
+            while( (count = in.read(buf)) != -1)
+            {
+                if( Thread.interrupted() )
+                {
+                    throw new InterruptedException();
+                }
+                out.write(buf, 0, count);
+            }
+            out.close();
+            in.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return file;
+    }
+
+    public InputStream getFileInputStreamByKey(String key) {
+        S3Object s3Object = s3client.getObject(bucketName,key);
+        return s3Object.getObjectContent();
     }
 }

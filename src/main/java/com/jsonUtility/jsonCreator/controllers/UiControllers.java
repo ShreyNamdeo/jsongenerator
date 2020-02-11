@@ -96,7 +96,7 @@ public class UiControllers {
         return "file_list :: urlFileList";
     }
 
-    @GetMapping("/files/{filename:.+}")
+    /*@GetMapping("/files/{filename:.+}")
     @ResponseBody
     @Deprecated
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
@@ -104,7 +104,7 @@ public class UiControllers {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
-    }
+    }*/
 
     @RequestMapping(value = "/delete/file/{filename:.+}", method = RequestMethod.GET)
     public String deleteFile(@PathVariable String filename,RedirectAttributes redirectAttributes) {

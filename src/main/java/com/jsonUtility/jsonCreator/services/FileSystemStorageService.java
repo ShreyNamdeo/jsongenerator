@@ -69,10 +69,10 @@ public class FileSystemStorageService {
 				fileVersion1.setFileVersion(oldVersion+1);
 				fileVersionsRepository.save(fileVersion1);
 			}
-			try (InputStream inputStream = file.getInputStream()) {
+			/*try (InputStream inputStream = file.getInputStream()) {
 				//Files.copy(inputStream, this.uploadLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
-			}
-		} catch (IOException e) {
+			}*/
+		} catch (Exception e) {
 			throw new RuntimeException("Failed to store file " + filename, e);
 		}
 	}
