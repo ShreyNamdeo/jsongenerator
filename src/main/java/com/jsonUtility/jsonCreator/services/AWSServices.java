@@ -87,7 +87,7 @@ public class AWSServices {
         Date fifteenMinutesFromNow = Date.from(LocalDateTime.now(Clock.systemUTC()).plusMinutes(15).toInstant(UTC));
         //createUrl.setExpiration(fifteenMinutesFromNow);
         createUrl.setResponseHeaders(new ResponseHeaderOverrides().withContentType(contentType));
-        //s3client.setRegion(Region.getRegion(Regions.US_WEST_2));
+        s3client.setRegion(Region.getRegion(Regions.US_EAST_2));
         return s3client.generatePresignedUrl(createUrl);
     }
 
