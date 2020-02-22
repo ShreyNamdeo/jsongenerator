@@ -141,7 +141,8 @@ public class JsonCreatorService {
                         jsonFileDto.setDescription(val);
                 }
                 if(isNotNull(jsonFileDto))
-                    if ( !(jsonFileDto.getCategoriesSpecific().equals("")
+                    jsonFileDtos.add(jsonFileDto);
+                    /*if ( !(jsonFileDto.getCategoriesSpecific().equals("")
                             && jsonFileDto.getSubject().equals("")
                             && jsonFileDto.getStartDate().equals("")
                             && jsonFileDto.getStartTime().equals("")
@@ -153,8 +154,7 @@ public class JsonCreatorService {
                             && jsonFileDto.getGreetingCardURL().equals("")
                             && jsonFileDto.getDescription().equals(""))){
                         //if (row.getLastCellNum() != -1)
-                        jsonFileDtos.add(jsonFileDto);
-                    }
+                    }*/
                 /*if (row.getLastCellNum() != -1)
                     jsonFileDtos.add(jsonFileDto);*/
             }
@@ -233,7 +233,8 @@ public class JsonCreatorService {
                         jsonFileDto.setDescription(val);
                 }
                 if(isNotNullForReligion(jsonFileDto))
-                    if ( !(jsonFileDto.getCountries().equals("")
+                    jsonFileDtos.add(jsonFileDto);
+                    /*if ( !(jsonFileDto.getCountries().equals("")
                             && jsonFileDto.getReligion().equals("")
                             && jsonFileDto.getSubject().equals("")
                             && jsonFileDto.getStartDate().equals("")
@@ -246,8 +247,8 @@ public class JsonCreatorService {
                             && jsonFileDto.getGreetingCardURL().equals("")
                             && jsonFileDto.getDescription().equals(""))){
                         //if (row.getLastCellNum() != -1)
-                        jsonFileDtos.add(jsonFileDto);
-                    }
+                    }*/
+
                 /*if (row.getLastCellNum() != -1)
                     jsonFileDtos.add(jsonFileDto);*/
             }
