@@ -140,8 +140,9 @@ public class JsonCreatorService {
                     if (j==11)
                         jsonFileDto.setDescription(val);
                 }
-                if(isNotNull(jsonFileDto))
-                    jsonFileDtos.add(jsonFileDto);
+                jsonFileDtos.add(jsonFileDto);
+                //if(isNotNull(jsonFileDto))
+
                     /*if ( !(jsonFileDto.getCategoriesSpecific().equals("")
                             && jsonFileDto.getSubject().equals("")
                             && jsonFileDto.getStartDate().equals("")
@@ -232,8 +233,8 @@ public class JsonCreatorService {
                     if (j==12)
                         jsonFileDto.setDescription(val);
                 }
-                if(isNotNullForReligion(jsonFileDto))
-                    jsonFileDtos.add(jsonFileDto);
+                jsonFileDtos.add(jsonFileDto);
+                //if(isNotNullForReligion(jsonFileDto))
                     /*if ( !(jsonFileDto.getCountries().equals("")
                             && jsonFileDto.getReligion().equals("")
                             && jsonFileDto.getSubject().equals("")
