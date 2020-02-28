@@ -140,22 +140,25 @@ public class JsonCreatorService {
                     if (j==11)
                         jsonFileDto.setDescription(val);
                 }
-                jsonFileDtos.add(jsonFileDto);
+
                 //if(isNotNull(jsonFileDto))
 
-                    /*if ( !(jsonFileDto.getCategoriesSpecific().equals("")
-                            && jsonFileDto.getSubject().equals("")
-                            && jsonFileDto.getStartDate().equals("")
-                            && jsonFileDto.getStartTime().equals("")
-                            && jsonFileDto.getEndDate().equals("")
-                            && jsonFileDto.getEndTime().equals("")
-                            && jsonFileDto.getAlldayevent().equals("")
-                            && jsonFileDto.getCategories().equals("")
-                            && jsonFileDto.getWikipediaURL().equals("")
-                            && jsonFileDto.getGreetingCardURL().equals("")
-                            && jsonFileDto.getDescription().equals(""))){
-                        //if (row.getLastCellNum() != -1)
-                    }*/
+                if ( jsonFileDto.getId() != null && !( jsonFileDto.getId().equals("")
+                        //&& jsonFileDto.getCategoriesSpecific().equals("")
+                        //&& jsonFileDto.getSubject().equals("")
+                        //&& jsonFileDto.getStartDate().equals("")
+                        //&& jsonFileDto.getStartTime().equals("")
+                        //&& jsonFileDto.getEndDate().equals("")
+                        //&& jsonFileDto.getEndTime().equals("")
+                        //&& jsonFileDto.getAlldayevent().equals("")
+                        //&& jsonFileDto.getCategories().equals("")
+                        //&& jsonFileDto.getWikipediaURL().equals("")
+                        //&& jsonFileDto.getGreetingCardURL().equals("")
+                        //&& jsonFileDto.getDescription().equals("")
+                    )){
+                    //if (row.getLastCellNum() != -1)
+                    jsonFileDtos.add(jsonFileDto);
+                }
                 /*if (row.getLastCellNum() != -1)
                     jsonFileDtos.add(jsonFileDto);*/
             }
@@ -233,22 +236,24 @@ public class JsonCreatorService {
                     if (j==12)
                         jsonFileDto.setDescription(val);
                 }
-                jsonFileDtos.add(jsonFileDto);
                 //if(isNotNullForReligion(jsonFileDto))
-                    /*if ( !(jsonFileDto.getCountries().equals("")
-                            && jsonFileDto.getReligion().equals("")
-                            && jsonFileDto.getSubject().equals("")
-                            && jsonFileDto.getStartDate().equals("")
-                            && jsonFileDto.getStartTime().equals("")
-                            && jsonFileDto.getEndDate().equals("")
-                            && jsonFileDto.getEndTime().equals("")
-                            && jsonFileDto.getAlldayevent().equals("")
-                            && jsonFileDto.getCategories().equals("")
-                            && jsonFileDto.getWikipediaURL().equals("")
-                            && jsonFileDto.getGreetingCardURL().equals("")
-                            && jsonFileDto.getDescription().equals(""))){
+                    if (jsonFileDto.getId() != null && !( jsonFileDto.getId().equals("")
+                            //&&jsonFileDto.getCountries().equals("")
+                            //&& jsonFileDto.getReligion().equals("")
+                            //&& jsonFileDto.getSubject().equals("")
+                            //&& jsonFileDto.getStartDate().equals("")
+                            //&& jsonFileDto.getStartTime().equals("")
+                            //&& jsonFileDto.getEndDate().equals("")
+                            //&& jsonFileDto.getEndTime().equals("")
+                            //&& jsonFileDto.getAlldayevent().equals("")
+                            //&& jsonFileDto.getCategories().equals("")
+                            //&& jsonFileDto.getWikipediaURL().equals("")
+                            //&& jsonFileDto.getGreetingCardURL().equals("")
+                            //&& jsonFileDto.getDescription().equals("")
+                    )){
                         //if (row.getLastCellNum() != -1)
-                    }*/
+                        jsonFileDtos.add(jsonFileDto);
+                    }
 
                 /*if (row.getLastCellNum() != -1)
                     jsonFileDtos.add(jsonFileDto);*/
