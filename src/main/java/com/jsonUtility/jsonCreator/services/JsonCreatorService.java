@@ -139,6 +139,8 @@ public class JsonCreatorService {
                         jsonFileDto.setGreetingCardURL(val);
                     if (j==11)
                         jsonFileDto.setDescription(val);
+                    if (j==12)
+                        jsonFileDto.setCountries(val);
                 }
 
                 //if(isNotNull(jsonFileDto))
@@ -235,6 +237,8 @@ public class JsonCreatorService {
                         jsonFileDto.setGreetingCardURL(val);
                     if (j==12)
                         jsonFileDto.setDescription(val);
+                    if (j==13)
+                        jsonFileDto.setCountries(val);
                 }
                 //if(isNotNullForReligion(jsonFileDto))
                     if (jsonFileDto.getId() != null && !( jsonFileDto.getId().equals("")
